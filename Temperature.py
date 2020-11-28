@@ -1,6 +1,6 @@
 #! /usr/bin/python3.8
 import tkinter as tk
-from random import choice
+from random import choice, randint
 from math import pi
 
 
@@ -35,11 +35,21 @@ def radians(temp):
     return temp * pi / 180
 
 
+def average_energy(temp):
+    boltzmann_constant = 1.380649e-23
+    temp = kelvin(temp)
+    energy = 1.5 * boltzmann_constant * temp
+    conversion_constant = 6.242e18
+    return energy * conversion_constant
+
+
 def random_unit(temp):
     units = choice(list(scales.keys()))
     new_temp = scales[units](temp)
     if units == "Radians":
-        lbl_text = f"{new_temp:.2f} radians"
+        lbl_text = f"{new_temp:.2f} Radians"
+    elif units == "eV":
+        lbl_text = f"{new_temp:.2f} eV"
     else:
         lbl_text = f"{new_temp:.2f} degrees {units}"
     lbl.configure(text=lbl_text)
@@ -53,6 +63,7 @@ scales = {
     "Reaumur": reaumur,
     "Romer": romer,
     "Radians": radians,
+    "eV": average_energy,
 }
 
 window = tk.Tk()
@@ -60,7 +71,7 @@ window = tk.Tk()
 window.title("Temperature")
 window.geometry("250x100")
 
-temp = 30
+temp = randint(5, 40)
 
 lbl = tk.Label(window)
 lbl.pack(ipady=15)
